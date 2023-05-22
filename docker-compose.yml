@@ -1,9 +1,7 @@
 version: '3.9'
 services:
   stub:
-    build:
-      context: .
-      dockerfile: ./Dockerfile
+    image: hamolicious/configuration-less-generic-stub:1.0.0
     volumes:
       - "./not-config.json:/not-config.json"
     ports:
