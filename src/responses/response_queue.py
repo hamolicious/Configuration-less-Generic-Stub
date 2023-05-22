@@ -12,7 +12,7 @@ class ResponseQueue:
 			config = json.load(f)
 
 		self.__default_response = Response.from_dict(
-			config.get('not-conf-resp')
+			config.get('not-configured-response')
 		)
 
 	def __check_queue_exists(self, addr: str, route: str, method: str) -> bool:

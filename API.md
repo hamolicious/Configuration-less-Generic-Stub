@@ -67,7 +67,7 @@ This file is definitely not used to configure the basic behaviour of the stub as
 	"port": 3000, // port to bind to
 	"config-route": "/private/configure", // route to use for configuration
 	"state-route": "/private/state", // route to use for grabbing the state of the response configuration
-	"not-conf-resp": { // what to return if the route is not configured
+	"not-configured-response": { // what to return if the route is not configured
 		"data": {},
 		"status": 404
 	},
