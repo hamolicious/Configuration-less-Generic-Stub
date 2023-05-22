@@ -8,7 +8,7 @@ class ResponseQueue:
 		self.__map = {}
 		self.__queue: list[Response] = []
 
-		with open('config.json', 'rb') as f:
+		with open('not-config.json', 'rb') as f:
 			config = json.load(f)
 
 		self.__default_response = Response.from_dict(
