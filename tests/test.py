@@ -120,6 +120,10 @@ class TestAPI(unittest.TestCase):
 			self.assertNotEqual(data.get('/hello'), {})
 			self.assertEqual(len(data.get('/hello').get('GET')), 1)
 
+		with requests.get(f'{get_url()}{hello.url}') as r:
+			self.assertEqual(r.status_code, 200)
+			self.assertEqual(r.json().get('message'), 'world')
+
 
 if __name__ == '__main__':
 	unittest.main()
