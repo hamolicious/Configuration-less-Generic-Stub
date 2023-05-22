@@ -1,6 +1,6 @@
 import unittest
 import requests
-from tests.util import get_url, assert404
+from tests.util import get_url, assert404, pretty_print_state
 from tests.util.requests import ping
 
 
@@ -52,27 +52,13 @@ class TestAPI(unittest.TestCase):
 		assert404(self, ping.url)
 
 	def test_state(self):
-		expected_state = {
-                    "127.0.0.1": {
-                        "/ping": {
-                            "GET": [
-                                {
-                                    "data": {
-                                        "message": "pong"
-                                    },
-                                    "status": 200,
-                                    "single_use": True
-                                }
-                            ]
-                        }
-                    }
-                }
-
 		with requests.post(f'{get_url()}/private/configure', json=ping.request) as r:
 			r.close()
 
 		with requests.get(f'{get_url()}/private/state') as r:
-			data = r.json().get('127.0.0.1')
+			data: dict = r.json()
+			ip = list(data.keys())[0]
+			data = data.get(ip)
 
 			self.assertEqual(r.status_code, 200)
 			self.assertEqual(len(data.get('/ping').get('GET')), 1)
@@ -83,7 +69,7 @@ class TestAPI(unittest.TestCase):
 			r.close()
 
 		with requests.get(f'{get_url()}/private/state') as r:
-			data = r.json().get('127.0.0.1')
+			data = r.json().get(ip)
 
 			self.assertEqual(r.status_code, 200)
 			self.assertEqual(len(data.get('/ping').get('GET')), 0)

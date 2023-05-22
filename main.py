@@ -4,6 +4,8 @@ from src.util import dict_assert_value_exists, dict_safely_get_deep_value
 from src.responses import Response, ResponseQueue, ResponseJSONEncoder
 from threading import Lock
 import json
+from gevent.pywsgi import WSGIServer
+import os
 
 
 with open('not-config.json', 'rb') as f:
@@ -53,7 +55,13 @@ def catch_all(path: str):
 
 
 if __name__ == '__main__':
-	app.run(
-		host=config.get('host'),
-		port=config.get('port')
-	)
+	if os.environ.get('APP_ENV') == 'prod':
+		http_server = WSGIServer(
+			('', 3000), app,
+		)
+		http_server.serve_forever()
+	else:
+		app.run(
+			host=config.get('host'),
+			port=config.get('port')
+		)
