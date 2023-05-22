@@ -13,10 +13,8 @@ class TestAPI(unittest.TestCase):
 				data: dict = r.json()
 				TestAPI.ip = list(data.keys())[0]
 
-		while True: # HACK: this needs to be done properly
-			with requests.get(f'{get_url()}{ping.url}') as r:
-				if r.status_code == 404:
-					return
+		with requests.get(f'{get_url()}/private/reset', json={}) as r:
+			r.close()
 
 	def test_configure_ping(self):
 		with requests.post(f'{get_url()}/private/configure', json=ping.request) as r:
