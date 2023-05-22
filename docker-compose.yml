@@ -4,5 +4,7 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
+    volumes:
+      - "./not-config.json:/not-config.json"
     ports:
       - "3000:3000"
