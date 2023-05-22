@@ -43,6 +43,13 @@ def private_state():
 	return json.dumps(resp_queue.get_map(), cls=ResponseJSONEncoder), 200
 
 
+@app.route(config.get('reset-route'), methods=['POST'])
+@send_api_error_on_error()
+def private_reset():
+	print('Route: ' + str(request.get_json().get('route')))
+	resp_queue.reset(request.remote_addr, request.get_json().get('route'))
+	return Response({}, 204).to_resp()
+
 @app.route('/', defaults={'path': ''}, methods=['GET', 'POST'])
 @app.route('/<path:path>', methods=['GET', 'POST'])
 @send_api_error_on_error()

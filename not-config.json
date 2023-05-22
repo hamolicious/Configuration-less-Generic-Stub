@@ -3,6 +3,7 @@
 	"port": 3000,
 	"config-route": "/private/configure",
 	"state-route": "/private/state",
+	"reset-route": "/private/reset",
 	"not-configured-response": {
 		"data": {},
 		"status": 404

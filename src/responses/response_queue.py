@@ -35,6 +35,12 @@ class ResponseQueue:
 		lst = self.__map[addr][route][method]
 		self.__map[addr][route][method] = lst + [resp]
 
+	def reset(self, addr: str, route: str) -> None:
+		if route is None:
+			self.__map[addr] = {}
+		else:
+			self.__map[addr][route] = {}
+
 	def dequeue(self, addr: str, route: str, method: str) -> Response:
 		if self.__check_queue_exists(addr, route, method) is False:
 			return self.__default_response

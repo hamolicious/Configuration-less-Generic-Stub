@@ -2,6 +2,7 @@
 # Endpoints
 - [POST /private/configure](#configure)
 - [GET /private/state](#state)
+- [GET /private/reset](#reset)
 - [GET /*](#get--post)
 - [POST /*](#get--post)
 
@@ -49,6 +50,14 @@ GET request to `/private/state` (can be changed, see [not-config.json](#not-conf
 }
 ```
 Notice that the IP address is also taken into account, this means that the stub can handle multiple concurrent connections from different services and respond separately.
+
+## Reset
+POST request to `/private/reset` allows you to reset the responses for the entire client (by using body of `{}`) or for a single route in the client (by supplying `route` in the body, see below for example)
+```json
+{
+	"route": "/ping" // deletes all data inside of `/ping`
+}
+```
 
 ## GET & POST /*
 Lastly, making a request to any route other than the 2 previously mentioned will result in one of 2 cases:
