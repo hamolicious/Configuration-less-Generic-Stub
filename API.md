@@ -6,7 +6,7 @@
 - [POST /*](#get--post)
 
 ## Configure
-POST request to `/private/configure` (can be changed, see [config.json](#configjson)) with the following body structure:
+POST request to `/private/configure` (can be changed, see [not-config.json](#not-configjson)) with the following body structure:
 ```json
 {
 	"route": "/ping", // the route that the configuration should apply to
@@ -30,7 +30,7 @@ Responses that are `single_use == True` will be discarded once returned. `data` 
 ```
 
 ## State
-GET request to `/private/state` (can be changed, see [config.json](#configjson)) is used to get the current state of the stub, this will return any and all configured responses; An example of a response sent can be seen below:
+GET request to `/private/state` (can be changed, see [not-config.json](#not-configjson)) is used to get the current state of the stub, this will return any and all configured responses; An example of a response sent can be seen below:
 ```json
 {
 	"127.0.0.1": {
@@ -57,10 +57,10 @@ Lastly, making a request to any route other than the 2 previously mentioned will
 If you have previously created a response configuration for the route, the configured response will be returned and, if `single_use` is `True`, removed from the queue.
 
 ### The route is *not* configured
-A body-less 404 response will be sent (can be changed, see [config.json](#configjson)).
+A body-less 404 response will be sent (can be changed, see [not-config.json](#not-configjson)).
 
-## config.json
-This file is used to configure the behaviour of the stub.
+## not-config.json
+This file is definitely not used to configure the basic behaviour of the stub as the stub is configuration-less, regardless, this is the basic overview of how you *would* configure the stub if it used a config file:
 ```json
 {
 	"host": "0.0.0.0", // host to bind to
@@ -70,7 +70,14 @@ This file is used to configure the behaviour of the stub.
 	"not-conf-resp": { // what to return if the route is not configured
 		"data": {},
 		"status": 404
+	},
+	"default-responses": { // not implemented yet
+		"/ping": {
+			"GET": {
+				"data": { "message": "pong" },
+				"status": 200
+			}
+		}
 	}
 }
 ```
-

@@ -6,7 +6,7 @@ from threading import Lock
 import json
 
 
-with open('config.json', 'rb') as f:
+with open('not-config.json', 'rb') as f:
 	config = json.load(f)
 
 app = Flask(__name__)
