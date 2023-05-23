@@ -8,13 +8,22 @@ class TestAPI(unittest.TestCase):
 	ip = None
 
 	def setUp(self) -> None:
+		need_priming = False
+		with requests.get(f'{get_url()}/private/state') as r:
+			if r.json() == {}:
+				need_priming = True
+
+		if need_priming:
+			with requests.post(f'{get_url()}/private/configure', json=ping.request) as r:
+				r.close()
+
+		with requests.get(f'{get_url()}/private/reset', json={}) as r:
+			r.close()
+
 		if self.ip is None:
 			with requests.get(f'{get_url()}/private/state') as r:
 				data: dict = r.json()
 				TestAPI.ip = list(data.keys())[0]
-
-		with requests.get(f'{get_url()}/private/reset', json={}) as r:
-			r.close()
 
 	def test_configure_ping(self):
 		with requests.post(f'{get_url()}/private/configure', json=ping.request) as r:
