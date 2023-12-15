@@ -26,6 +26,8 @@ class TestAPI(unittest.TestCase):
 				data: dict = r.json()
 				TestAPI.ip = list(data.keys())[0]
 
+		pretty_print_state()
+
 	def test_configure_ping(self) -> None:
 		with requests.post(f'{get_url()}/private/configure', json=ping.request) as r:
 			r.close()
