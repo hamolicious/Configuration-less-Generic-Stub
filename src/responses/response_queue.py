@@ -22,7 +22,6 @@ class ResponseQueue:
 		return self.__map.copy()
 
 	def enqueue(self, resp: Response, addr: str, route: str, method: str) -> None:
-
 		if self.__map.get(addr) is None:
 			self.__map[addr] = {}
 
