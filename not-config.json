@@ -4,6 +4,12 @@
 	"config-route": "POST /private/configure",
 	"state-route": "GET /private/state",
 	"reset-route": "POST /private/reset",
+	"identity-module": {
+		"name": "header-id",
+		"args": {
+			"header_name": "client-id"
+		}
+	},
 	"not-configured-response": {
 		"data": {},
 		"status": 404

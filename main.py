@@ -7,7 +7,7 @@ import json
 from gevent.pywsgi import WSGIServer
 import os
 import logging
-from src import identity_modules
+from src.identity_modules import get_identity
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -19,7 +19,6 @@ with open('not-config.json', 'rb') as f:
 app = Flask(__name__)
 resp_queue = ResponseQueue()
 config_lock = Lock()
-IDENTITY_MODULE = identity_modules.header_id
 
 
 @app.route('/', defaults={'path': ''}, methods=['GET', 'POST'])
@@ -30,7 +29,7 @@ def catch_all(path: str):
 		path = '/' + path
 
 	if f'{request.method} {path}' == config.get('reset-route'):
-		resp_queue.reset(IDENTITY_MODULE(app), request.get_json().get('route'))
+		resp_queue.reset(get_identity(app), request.get_json().get('route'))
 		return {}, 204
 
 	if f'{request.method} {path}' == config.get('state-route'):
@@ -47,7 +46,7 @@ def catch_all(path: str):
 			with config_lock:
 				resp_queue.enqueue(
 					resp=Response.from_dict(data),
-					id_=IDENTITY_MODULE(app),
+					id_=get_identity(app),
 					route=body.get('route'),
 					method=body.get('method'),
 				)
@@ -55,7 +54,7 @@ def catch_all(path: str):
 		return {}, 204
 
 
-	resp = resp_queue.dequeue(IDENTITY_MODULE(app), path, request.method)
+	resp = resp_queue.dequeue(get_identity(app), path, request.method)
 	resp.execute_delay()
 	return resp.to_resp()
 

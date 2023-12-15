@@ -1,3 +1,1 @@
-from .ip import ip
-from .header_id import header_id
-from .none import none
+from .get_identity import get_identity
