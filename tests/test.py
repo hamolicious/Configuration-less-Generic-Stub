@@ -9,11 +9,7 @@ class TestAPI(unittest.TestCase):
 	ip = None
 
 	def setUp(self) -> None:
-		send_request('POST', '/private/configure', json=ping.request)
 		send_request('POST', '/private/reset', json={})
-		response, _ = send_request('GET', '/private/state')
-		data: dict = response
-		self.ip = list(data.keys())[0]
 
 	def test_configure_ping(self) -> None:
 		send_request('POST', '/private/configure', json=ping.request)
@@ -56,7 +52,7 @@ class TestAPI(unittest.TestCase):
 
 		response, status = send_request('GET', '/private/state')
 		data: dict = response
-		data = data.get(self.ip)
+		data = data.get('test-runner')
 
 		self.assertEqual(status, 200)
 		self.assertEqual(len(data.get('/ping').get('GET')), 1)
@@ -66,7 +62,7 @@ class TestAPI(unittest.TestCase):
 		send_request('GET', ping.url)
 
 		response, status = send_request('GET', '/private/state')
-		data = response.get(self.ip)
+		data = response.get('test-runner')
 
 		self.assertEqual(status, 200)
 		self.assertEqual(len(data.get('/ping').get('GET')), 0)
@@ -81,7 +77,7 @@ class TestAPI(unittest.TestCase):
 
 		response, status = send_request('GET', '/private/state')
 		self.assertEqual(status, 200)
-		self.assertEqual(response.get(self.ip), {})
+		self.assertEqual(response.get('test-runner'), {})
 
 		assert404(self, ping.url)
 
@@ -96,9 +92,9 @@ class TestAPI(unittest.TestCase):
 		response, status = send_request('GET', '/private/state')
 
 		self.assertEqual(status, 200)
-		self.assertEqual(response.get(self.ip).get('/ping'), {})
-		self.assertNotEqual(response.get(self.ip).get('/hello'), {})
-		self.assertEqual(len(response.get(self.ip).get('/hello').get('GET')), 1)
+		self.assertEqual(response.get('test-runner').get('/ping'), {})
+		self.assertNotEqual(response.get('test-runner').get('/hello'), {})
+		self.assertEqual(len(response.get('test-runner').get('/hello').get('GET')), 1)
 
 		response, status = send_request('GET', hello.url)
 		self.assertEqual(status, 200)

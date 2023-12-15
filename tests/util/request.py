@@ -13,9 +13,15 @@ def send_request(method: str, url: str, json: dict=None) -> tuple[dict | bytes, 
 		'PATCH': requests.patch,
 	}[method]
 
-	kwargs = {}
+	headers = {
+		'client-id': 'test-runner'
+	}
+
+	kwargs = {
+		'headers': headers
+	}
 	if json is not None:
-		kwargs = { 'json': json }
+		kwargs['json'] = json
 
 	with request_type(f'{get_url()}{url}', **kwargs) as r:
 		try:

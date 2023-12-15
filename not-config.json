@@ -1,6 +1,6 @@
 {
 	"host": "0.0.0.0",
-	"port": 3000,
+	"port": 3001,
 	"config-route": "POST /private/configure",
 	"state-route": "GET /private/state",
 	"reset-route": "POST /private/reset",
