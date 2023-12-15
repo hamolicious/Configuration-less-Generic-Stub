@@ -15,3 +15,16 @@ The entire stub is like 150 lines long and is extremely simple, the entirety of 
 ## Whats Next
 - [ ] Add `default-response` config on an endpoint so each client can configure their default response (per-endpoint)
 - [ ] Add url parameter differentiation, call to `/?a=b` will be different to `/?a=c`
+
+## How to test
+Using Makefile:
+```bash
+make start
+make test-locally
+```
+
+Using python:
+```bash
+docker-compose up -d
+python -m unittest discover tests/
+```
