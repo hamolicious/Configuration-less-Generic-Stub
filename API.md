@@ -19,6 +19,7 @@ POST request to `/private/configure` (can be changed, see [not-config.json](#not
 			},
 			"status": 200,  // status code to return
 			"single_use": true, // wether to remove this response after use
+			"delay": 500, // ms to delay response for. Useful for load-testing and mimicking dependencies' behaviour (-1 to disable)
 		}
 	]
 }

@@ -28,10 +28,10 @@ def private_configure():
 	for data in body.get('data'):
 		with config_lock:
 			resp_queue.enqueue(
-				Response.from_dict(data),
-				request.remote_addr,
-				body.get('route'),
-				body.get('method'),
+				resp=Response.from_dict(data),
+				addr=request.remote_addr,
+				route=body.get('route'),
+				method=body.get('method'),
 			)
 
 	return {}, 204
@@ -58,6 +58,7 @@ def catch_all(path: str):
 		path = '/' + path
 
 	resp = resp_queue.dequeue(request.remote_addr, path, request.method)
+	resp.execute_delay()
 	return resp.to_resp()
 
 
@@ -70,5 +71,6 @@ if __name__ == '__main__':
 	else:
 		app.run(
 			host=config.get('host'),
-			port=config.get('port')
+			port=config.get('port'),
+			debug=True,
 		)

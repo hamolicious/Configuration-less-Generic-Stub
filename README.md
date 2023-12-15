@@ -17,14 +17,14 @@ The entire stub is like 150 lines long and is extremely simple, the entirety of 
 - [ ] Add url parameter differentiation, call to `/?a=b` will be different to `/?a=c`
 
 ## How to test
-Using Makefile:
-```bash
-make start
-make test-locally
-```
 
-Using python:
 ```bash
+docker build -t hamolicious/configuration-less-generic-stub:1.0.0  .
 docker-compose up -d
 python -m unittest discover tests/
+```
+
+Or using Makefile:
+```bash
+make build start test-locally
 ```
