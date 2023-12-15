@@ -36,14 +36,14 @@ jobs:
           tag_name: ${{ steps.semver.outputs.patch }}
           release_name: Release ${{ steps.semver.outputs.patch }}
 
-      # - name: Build
-      #   run: |
-      #     docker build -t hamolicious/configuration-less-generic-stub:${{ steps.semver.outputs.patch }}  .
+      - name: Build
+        run: |
+          docker build -t hamolicious/configuration-less-generic-stub:${{ steps.semver.outputs.patch }}  .
 
-      # - name: Log in to Dockerhub
-      #   run: |
-      #     docker login -u hamolicious -p ${{ secrets.DOCKER_PASS }}
+      - name: Log in to Dockerhub
+        run: |
+          docker login -u hamolicious -p ${{ secrets.DOCKER_PASS }}
 
-      # - name: Publish image
-      #   run: |
-      #     docker push hamolicious/configuration-less-generic-stub:${{ steps.semver.outputs.patch }}
+      - name: Publish image
+        run: |
+          docker push hamolicious/configuration-less-generic-stub:${{ steps.semver.outputs.patch }}
