@@ -16,15 +16,14 @@ The entire stub is like 150 lines long and is extremely simple, the entirety of 
 - [ ] Add `default-response` config on an endpoint so each client can configure their default response (per-endpoint)
 - [ ] Add url parameter differentiation, call to `/?a=b` will be different to `/?a=c`
 
-## How to test
+## How to
+### Test
 
 ```bash
-docker build -t hamolicious/configuration-less-generic-stub:1.0.0  .
-docker-compose up -d
-python -m unittest discover tests/
+make test
 ```
 
-Or using Makefile:
+### Run locally
 ```bash
-make build start test-locally
+make start
 ```

@@ -8,13 +8,13 @@ from gevent.pywsgi import WSGIServer
 import os
 import logging
 from src.identity_modules import get_identity
+from src.util import load_config
 
 
 logging.basicConfig(level=logging.DEBUG)
 
 
-with open('/app/not-config.json', 'rb') as f:
-	config = json.load(f)
+config = load_config()
 
 app = Flask(__name__)
 resp_queue = ResponseQueue()

@@ -1,6 +1,6 @@
 from .response import Response
 import json
-from ..util import dict_safely_get_deep_value
+from ..util import dict_safely_get_deep_value, load_config
 
 
 class ResponseQueue:
@@ -8,8 +8,7 @@ class ResponseQueue:
 		self.__map = {}
 		self.__queue: list[Response] = []
 
-		with open('/app/not-config.json', 'rb') as f:
-			config = json.load(f)
+		config = load_config()
 
 		self.__default_response = Response.from_dict(
 			config.get('not-configured-response')
