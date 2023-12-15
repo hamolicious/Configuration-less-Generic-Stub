@@ -26,10 +26,7 @@ def catch_all(path: str):
 	if not path.startswith('/'):
 		path = '/' + path
 
-	logging.debug(path)
-
 	if f'{request.method} {path}' == config.get('reset-route'):
-		print('Route: ' + str(request.get_json().get('route')))
 		resp_queue.reset(request.remote_addr, request.get_json().get('route'))
 		return {}, 204
 
@@ -57,7 +54,6 @@ def catch_all(path: str):
 
 	resp = resp_queue.dequeue(request.remote_addr, path, request.method)
 	resp.execute_delay()
-	logging.debug(resp.to_resp())
 	return resp.to_resp()
 
 
