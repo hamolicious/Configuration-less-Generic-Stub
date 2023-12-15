@@ -1,6 +1,6 @@
 from .response import Response
 import json
-from ..util import dict_safely_get_deep_value
+from ..util import dict_safely_get_deep_value, load_config
 
 
 class ResponseQueue:
@@ -8,46 +8,45 @@ class ResponseQueue:
 		self.__map = {}
 		self.__queue: list[Response] = []
 
-		with open('not-config.json', 'rb') as f:
-			config = json.load(f)
+		config = load_config()
 
 		self.__default_response = Response.from_dict(
 			config.get('not-configured-response')
 		)
 
-	def __check_queue_exists(self, addr: str, route: str, method: str) -> bool:
-		return not dict_safely_get_deep_value(self.__map, addr, route, method) is None
+	def __check_queue_exists(self, id_: str, route: str, method: str) -> bool:
+		return not dict_safely_get_deep_value(self.__map, id_, route, method) is None
 
 	def get_map(self) -> dict:
 		return self.__map.copy()
 
-	def enqueue(self, resp: Response, addr: str, route: str, method: str) -> None:
-		if self.__map.get(addr) is None:
-			self.__map[addr] = {}
+	def enqueue(self, resp: Response, id_: str, route: str, method: str) -> None:
+		if self.__map.get(id_) is None:
+			self.__map[id_] = {}
 
-		if self.__map[addr].get(route) is None:
-			self.__map[addr][route] = {}
+		if self.__map[id_].get(route) is None:
+			self.__map[id_][route] = {}
 
-		if self.__map[addr][route].get(method) is None:
-			self.__map[addr][route][method] = []
+		if self.__map[id_][route].get(method) is None:
+			self.__map[id_][route][method] = []
 
-		lst = self.__map[addr][route][method]
-		self.__map[addr][route][method] = lst + [resp]
+		lst = self.__map[id_][route][method]
+		self.__map[id_][route][method] = lst + [resp]
 
-	def reset(self, addr: str, route: str) -> None:
+	def reset(self, id_: str, route: str) -> None:
 		if route is None:
-			self.__map[addr] = {}
+			self.__map[id_] = {}
 		else:
-			self.__map[addr][route] = {}
+			self.__map[id_][route] = {}
 
-	def dequeue(self, addr: str, route: str, method: str) -> Response:
-		if self.__check_queue_exists(addr, route, method) is False:
+	def dequeue(self, id_: str, route: str, method: str) -> Response:
+		if self.__check_queue_exists(id_, route, method) is False:
 			return self.__default_response
 
-		if len(self.__map[addr][route][method]) == 0:
+		if len(self.__map[id_][route][method]) == 0:
 			return self.__default_response
 
-		queue = self.__map[addr][route][method]
+		queue = self.__map[id_][route][method]
 
 		if not queue[0].is_single_use():
 			return queue[0]

@@ -7,12 +7,14 @@ import json
 from gevent.pywsgi import WSGIServer
 import os
 import logging
+from src.identity_modules import get_identity
+from src.util import load_config
+
 
 logging.basicConfig(level=logging.DEBUG)
 
 
-with open('not-config.json', 'rb') as f:
-	config = json.load(f)
+config = load_config()
 
 app = Flask(__name__)
 resp_queue = ResponseQueue()
@@ -26,11 +28,8 @@ def catch_all(path: str):
 	if not path.startswith('/'):
 		path = '/' + path
 
-	logging.debug(path)
-
 	if f'{request.method} {path}' == config.get('reset-route'):
-		print('Route: ' + str(request.get_json().get('route')))
-		resp_queue.reset(request.remote_addr, request.get_json().get('route'))
+		resp_queue.reset(get_identity(app), request.get_json().get('route'))
 		return {}, 204
 
 	if f'{request.method} {path}' == config.get('state-route'):
@@ -47,7 +46,7 @@ def catch_all(path: str):
 			with config_lock:
 				resp_queue.enqueue(
 					resp=Response.from_dict(data),
-					addr=request.remote_addr,
+					id_=get_identity(app),
 					route=body.get('route'),
 					method=body.get('method'),
 				)
@@ -55,9 +54,8 @@ def catch_all(path: str):
 		return {}, 204
 
 
-	resp = resp_queue.dequeue(request.remote_addr, path, request.method)
+	resp = resp_queue.dequeue(get_identity(app), path, request.method)
 	resp.execute_delay()
-	logging.debug(resp.to_resp())
 	return resp.to_resp()
 
 

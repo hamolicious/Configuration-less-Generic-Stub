@@ -1,0 +1,4 @@
+services:
+  stub:
+    environment:
+      - APP_ENV=test

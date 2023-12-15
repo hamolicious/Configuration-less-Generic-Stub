@@ -2,9 +2,7 @@ version: '3.9'
 services:
   stub:
     image: hamolicious/configuration-less-generic-stub:1.0.0
-    environment:
-      - APP_ENV=${APP_ENV}
     volumes:
-      - "./not-config.json:/not-config.json"
+      - "./configs/not-config.json:/not-config.json"
     ports:
-      - "3000:3000"
+      - "3001:3001"

@@ -1,0 +1,34 @@
+{
+	"test": {
+		"host": "0.0.0.0",
+		"port": 3001,
+		"config-route": "POST /private/configure",
+		"state-route": "GET /private/state",
+		"reset-route": "POST /private/reset",
+		"identity-module": {
+			"name": "header-id",
+			"args": {
+				"header_name": "client-id"
+			}
+		},
+		"not-configured-response": {
+			"data": {},
+			"status": 404
+		}
+	},
+
+	"dev": {
+		"host": "0.0.0.0",
+		"port": 3001,
+		"config-route": "POST /private/configure",
+		"state-route": "GET /private/state",
+		"reset-route": "POST /private/reset",
+		"identity-module": {
+			"name": "none"
+		},
+		"not-configured-response": {
+			"data": {},
+			"status": 404
+		}
+	}
+}
