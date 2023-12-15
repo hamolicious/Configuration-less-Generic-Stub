@@ -1,9 +1,9 @@
 {
 	"host": "0.0.0.0",
 	"port": 3000,
-	"config-route": "/private/configure",
-	"state-route": "/private/state",
-	"reset-route": "/private/reset",
+	"config-route": "POST /private/configure",
+	"state-route": "GET /private/state",
+	"reset-route": "POST /private/reset",
 	"not-configured-response": {
 		"data": {},
 		"status": 404
