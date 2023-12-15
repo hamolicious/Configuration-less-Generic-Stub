@@ -6,6 +6,9 @@ from threading import Lock
 import json
 from gevent.pywsgi import WSGIServer
 import os
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 
 with open('not-config.json', 'rb') as f:
@@ -16,40 +19,6 @@ resp_queue = ResponseQueue()
 config_lock = Lock()
 
 
-@app.route(config.get('config-route'), methods=['POST'])
-@send_api_error_on_error()
-def private_configure():
-	body = request.get_json()
-
-	dict_assert_value_exists(body, 'route', '`route` field is required')
-	dict_assert_value_exists(body, 'method', '`method` field is required')
-	dict_assert_value_exists(body, 'data', '`data` field is required')
-
-	for data in body.get('data'):
-		with config_lock:
-			resp_queue.enqueue(
-				resp=Response.from_dict(data),
-				addr=request.remote_addr,
-				route=body.get('route'),
-				method=body.get('method'),
-			)
-
-	return {}, 204
-
-
-@app.route(config.get('state-route'), methods=['GET'])
-@send_api_error_on_error()
-def private_state():
-	return json.dumps(resp_queue.get_map(), cls=ResponseJSONEncoder), 200
-
-
-@app.route(config.get('reset-route'), methods=['POST'])
-@send_api_error_on_error()
-def private_reset():
-	print('Route: ' + str(request.get_json().get('route')))
-	resp_queue.reset(request.remote_addr, request.get_json().get('route'))
-	return Response({}, 204).to_resp()
-
 @app.route('/', defaults={'path': ''}, methods=['GET', 'POST'])
 @app.route('/<path:path>', methods=['GET', 'POST'])
 @send_api_error_on_error()
@@ -57,8 +26,38 @@ def catch_all(path: str):
 	if not path.startswith('/'):
 		path = '/' + path
 
+	logging.debug(path)
+
+	if f'{request.method} {path}' == config.get('reset-route'):
+		print('Route: ' + str(request.get_json().get('route')))
+		resp_queue.reset(request.remote_addr, request.get_json().get('route'))
+		return {}, 204
+
+	if f'{request.method} {path}' == config.get('state-route'):
+		return json.dumps(resp_queue.get_map(), cls=ResponseJSONEncoder), 200
+
+	if f'{request.method} {path}' == config.get('config-route'):
+		body = request.get_json()
+
+		dict_assert_value_exists(body, 'route', '`route` field is required')
+		dict_assert_value_exists(body, 'method', '`method` field is required')
+		dict_assert_value_exists(body, 'data', '`data` field is required')
+
+		for data in body.get('data'):
+			with config_lock:
+				resp_queue.enqueue(
+					resp=Response.from_dict(data),
+					addr=request.remote_addr,
+					route=body.get('route'),
+					method=body.get('method'),
+				)
+
+		return {}, 204
+
+
 	resp = resp_queue.dequeue(request.remote_addr, path, request.method)
 	resp.execute_delay()
+	logging.debug(resp.to_resp())
 	return resp.to_resp()
 
 

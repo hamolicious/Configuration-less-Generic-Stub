@@ -18,15 +18,13 @@ class TestAPI(unittest.TestCase):
 			with requests.post(f'{get_url()}/private/configure', json=ping.request) as r:
 				r.close()
 
-		with requests.get(f'{get_url()}/private/reset', json={}) as r:
+		with requests.post(f'{get_url()}/private/reset', json={}) as r:
 			r.close()
 
 		if self.ip is None:
 			with requests.get(f'{get_url()}/private/state') as r:
 				data: dict = r.json()
 				TestAPI.ip = list(data.keys())[0]
-
-		pretty_print_state()
 
 	def test_configure_ping(self) -> None:
 		with requests.post(f'{get_url()}/private/configure', json=ping.request) as r:
