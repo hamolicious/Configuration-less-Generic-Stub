@@ -13,7 +13,7 @@ from src.identity_modules import get_identity
 logging.basicConfig(level=logging.DEBUG)
 
 
-with open('not-config.json', 'rb') as f:
+with open('/app/not-config.json', 'rb') as f:
 	config = json.load(f)
 
 app = Flask(__name__)

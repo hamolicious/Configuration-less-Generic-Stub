@@ -5,6 +5,6 @@ services:
     environment:
       - APP_ENV=${APP_ENV}
     volumes:
-      - "./not-config.json:/not-config.json"
+      - "./configs/not-config.json:/not-config.json"
     ports:
       - "3001:3001"
