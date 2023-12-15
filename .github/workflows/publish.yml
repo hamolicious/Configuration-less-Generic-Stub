@@ -40,9 +40,11 @@ jobs:
         run: |
           docker build -t hamolicious/configuration-less-generic-stub:${{ steps.semver.outputs.patch }}  .
 
-      - name: Log in to Dockerhub
-        run: |
-          docker login -u hamolicious -p ${{ secrets.DOCKER_PASS }}
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: hamolicious
+          password: ${{ secrets.DOCKER_PASS }}
 
       - name: Publish image
         run: |
