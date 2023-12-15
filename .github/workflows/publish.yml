@@ -1,6 +1,6 @@
 name: Publish
 
-on: [merge]
+on: [push]
 
 jobs:
   test:
