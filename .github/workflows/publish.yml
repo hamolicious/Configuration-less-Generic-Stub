@@ -1,4 +1,4 @@
-name: PR Runner
+name: Publish
 
 on: [merge]
 
