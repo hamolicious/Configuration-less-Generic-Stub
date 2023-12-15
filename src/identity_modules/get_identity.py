@@ -8,7 +8,7 @@ def get_identity(app: Flask) -> str:
 	with open('not-config.json', 'r') as f:
 		data = json.load(f)
 	module = data.get('identity-module').get('name')
-	kwargs = data.get('identity-module').get('args')
+	kwargs = data.get('identity-module').get('args', {})
 
 	return {
 		'header-id': header_id,
