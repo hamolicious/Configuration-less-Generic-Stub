@@ -13,7 +13,6 @@ The idea behind this stub is that it 0 configuration or setup, the responses for
 The entire stub is like 150 lines long and is extremely simple, the entirety of the documentation for the server can be found in [Docs](/docs/README.md).
 
 ## Whats Next
-- [ ] Add `default-response` config on an endpoint so each client can configure their default response (per-endpoint)
 - [ ] Add url parameter differentiation, call to `/?a=b` will be different to `/?a=c`
 
 ## How to
